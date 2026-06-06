@@ -1,0 +1,5 @@
+origem,severidade,mensagem,timestamp
+Sensor ESP32,Alta,Umidade baixa no Talhao B,2026-05-17T09:05:00-03:00
+CloudWatch,Media,Pico de temperatura monitorado,2026-05-17T12:10:00-03:00
+Blue Team,Media,Tentativa suspeita bloqueada,2026-05-17T12:40:00-03:00
+
