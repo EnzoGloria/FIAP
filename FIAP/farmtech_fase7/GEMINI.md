@@ -37,3 +37,10 @@ Este projeto é a entrega final (Fase 7) de uma sprint acadêmica da FIAP. O obj
 - [ ] **Integração Fase 6 (Visão Computacional - YOLO):** Trocar os *mocks* (baseados em `random.choice`) no arquivo `visao_computacional.py` por código real de inferência (carregando tensores/modelos, preferencialmente `ultralytics`), analisando imagens estáticas de uma pasta.
 - [ ] **Ajuste na UI (Streamlit):** Conectar de forma final os botões do dashboard aos respectivos processamentos (R e YOLO).
 - [ ] **Revisão Final Clean Code:** Garantir que 100% da base não possui comentários.
+
+## Status Atual do Projeto - Fase 5 Concluída
+
+- **Módulo `modules/alertas_aws.py`**: Totalmente implementado e validado. Contém integração assíncrona usando `threading` e tratamento de exceções robusto com `botocore.exceptions`.
+- **Validação de Infraestrutura**: O Amazon SNS foi configurado com o tópico `farmtech-alertas` e uma assinatura de e-mail foi confirmada com sucesso.
+- **Teste de Integração**: Realizado teste pontual forçando severidade máxima (Umidade: 15.0, Temperatura: 45.0) via interpretador interativo do Python. O disparo foi executado com sucesso e o e-mail de alerta crítico foi recebido na caixa de entrada.
+- **Próximo Passo**: Iniciar a Fase 6 (Visão Computacional / YOLO), conectando a interface do Streamlit (`app.py`) ao módulo `modules/visao_computacional.py` para processar imagens estáticas da lavoura.

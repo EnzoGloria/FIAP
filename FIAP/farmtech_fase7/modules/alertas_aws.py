@@ -6,11 +6,18 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 
 import boto3
+from botocore.exceptions import BotoCoreError, ClientError, NoCredentialsError
 
 
 def enviar_alerta_sns(mensagem: str, arn_topico: str) -> None:
-    cliente_sns = boto3.client("sns", region_name="us-east-1")
-    cliente_sns.publish(TopicArn=arn_topico, Message=mensagem)
+    try:
+        cliente_sns = boto3.client("sns", region_name="us-east-1")
+        cliente_sns.publish(TopicArn=arn_topico, Message=mensagem)
+    except (ClientError, NoCredentialsError, BotoCoreError):
+        print("\n=== [MODO DE SIMULACAO / FALLBACK] ===")
+        print("Credenciais AWS invalidas ou ausentes.")
+        print(f"MENSAGEM: {mensagem}")
+        print("======================================\n")
 
 
 def disparar_alerta_background(mensagem: str, arn_topico: str) -> None:
