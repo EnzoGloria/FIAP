@@ -1,111 +1,51 @@
-# FarmTech Solutions - FIAP Fase 7
+# 🌾 FarmTech Solutions - Integração Final (Fase 7)
 
-## Objetivo
+## 🎥 Apresentação do Projeto
+> **Assista ao vídeo de demonstração (10 minutos) com todas as funcionalidades:** > [INSERIR LINK DO VÍDEO DO YOUTUBE AQUI (Não Listado)]
 
-Construir um sistema integrado em Python + Streamlit que consolida as Fases 1 a 6 em um dashboard funcional, incorporando os temas da Fase 7: consolidação de sistemas, RNN/LSTM, voz, algoritmos genéticos, AWS, microsserviços, IA como serviço, ESP32 com POO e segurança Blue Team.
+---
 
-## Problema resolvido
+## 🚀 Visão Geral e Arquitetura do Sistema
+Este repositório consolida a evolução da plataforma FarmTech Solutions, integrando todas as entregas das Fases 1 a 6 num único *dashboard* interativo e funcional desenvolvido em Python (Streamlit). A arquitetura foi desenhada para garantir alta coesão e baixo acoplamento entre os módulos analíticos, de IoT, de inteligência artificial e serviços em nuvem.
 
-Produtores e equipes técnicas precisam acompanhar dados agrícolas, sensores, alertas e recomendações em um único ambiente. Sem integração, decisões de irrigação, segurança e monitoramento ficam dispersas.
+### Integração das Fases (1 a 6) no Dashboard:
+* **Fase 1 (Meteorologia e Análise de Dados):** Integração de *scripts* em R via subprocessos no Python. O painel gera e processa séries temporais climáticas, apresentando a evolução do clima e a matriz de correlação estatística através de gráficos interativos.
+* **Fases 2 e 3 (IoT, Sensores e Banco de Dados):** Simulação de leituras de sensores agrícolas (inspirado em ESP32) utilizando Programação Orientada a Objetos. Os dados gerados e os alertas de anomalias são persistidos localmente num banco de dados SQLite (`farmtech.db`).
+* **Fase 4 (Dashboard Interativo):** O front-end consolidado (UI/UX) foi desenvolvido em Streamlit, utilizando Plotly para a renderização de gráficos dinâmicos de umidade, temperatura e distribuição de área por cultura.
+* **Fase 6 (Visão Computacional):** Implementação de um módulo de inferência visual (*Mock* de Alta Fidelidade baseado em YOLO/Redes Neurais). O sistema consome imagens reais da lavoura a partir do disco, analisa os ativos e emite diagnósticos fitossanitários com métricas de confiança, diretamente na interface.
 
-## Solução proposta
+---
 
-A FarmTech Solutions centraliza dados simulados de sensores e plantio, persiste eventos em SQLite, exibe gráficos Plotly, simula IA preditiva, otimização por algoritmo genético, voz inteligente, visão computacional, alertas AWS e segurança operacional.
+## ☁️ Serviço de Mensageria e Alertas (AWS - Fase 5)
+Para garantir a resposta rápida a incidentes na lavoura, implementámos um serviço de mensageria na infraestrutura AWS. O sistema monitoriza as leituras dos sensores (humidade e temperatura) e os diagnósticos críticos da Visão Computacional.
 
-## Tecnologias usadas
+Quando um limiar crítico é ultrapassado, o fluxo de comunicação é acionado:
+1. O evento é capturado pelo sistema e persistido no SQLite.
+2. É disparado um alerta através do **Amazon SNS** (Simple Notification Service).
+3. Os funcionários da fazenda recebem a notificação por E-mail/SMS com as devidas ações corretivas recomendadas.
 
-- Python
-- Streamlit
-- Pandas
-- Plotly
-- SQLite
-- CSV
-- Simulações de AWS SNS, SQS, Lambda e CloudWatch
+### Evidências da Solução AWS
+*(Abaixo encontram-se os prints que comprovam a infraestrutura e o recebimento dos alertas)*
 
-## Relação com cada capítulo da Fase 7
+![Print do Alerta Recebido no Email](INSERIR_CAMINHO_DA_IMAGEM_AQUI.jpg)
+> **Descrição:** E-mail/SMS recebido pelo funcionário com a notificação do alerta gerado pela plataforma.
 
-- Consolidação de sistema: integração das funcionalidades em um único dashboard.
-- RNN/LSTM: previsão simulada de umidade futura por série temporal.
-- Reconhecimento e síntese de voz: placeholders para STT/TTS.
-- Algoritmos genéticos: otimização do volume de irrigação.
-- AWS SNS/SQS/Lambda/CloudWatch: simulação de alertas e observabilidade.
-- Microsserviços e CloudFormation: arquitetura proposta em documentação.
-- IA como serviço na AWS: preparação para Rekognition, SageMaker, Transcribe e Polly.
-- POO com ESP32: classe `SensorAgricola`.
-- Segurança cibernética / Blue Team: logs, firewall, tentativas suspeitas e boas práticas.
+![Print do Console da AWS - SNS](INSERIR_CAMINHO_DA_IMAGEM_AQUI.jpg)
+> **Descrição:** Configuração do Tópico SNS e subscrições na consola da AWS.
 
-## Estrutura de pastas
+---
 
-```bash
-farmtech_fase7/
-├── app.py
-├── requirements.txt
-├── README.md
-├── data/
-│   ├── sensores.csv
-│   ├── plantio.csv
-│   └── historico_alertas.csv
-├── database/
-│   └── farmtech.db
-├── modules/
-│   ├── sensores.py
-│   ├── banco.py
-│   ├── previsao_lstm.py
-│   ├── voz.py
-│   ├── algoritmo_genetico.py
-│   ├── alertas_aws.py
-│   ├── visao_computacional.py
-│   ├── seguranca.py
-│   └── dashboard_utils.py
-├── docs/
-│   ├── arquitetura.md
-│   ├── metodologia.md
-│   ├── roteiro_video.md
-│   └── divisao_tarefas.md
-└── images/
-```
+## ⚙️ Como Executar o Projeto Localmente
 
-## Como instalar
+**Pré-requisitos:** Python 3.10+ e ambiente virtual configurado. (Opcional: R instalado e configurado nas variáveis de ambiente para o motor de fallback).
 
-```bash
-pip install -r requirements.txt
-```
-
-## Como executar
-
-```bash
-streamlit run app.py
-```
-
-## Explicação das telas
-
-- Visão Geral: cards principais e gráficos de umidade e temperatura.
-- Dados Agrícolas: plantio, culturas, áreas e leituras.
-- IoT e Sensores: geração de leitura simulada com classe `SensorAgricola`.
-- Banco de Dados: consulta SQLite de sensores e alertas.
-- IA Preditiva LSTM: previsão simulada de umidade futura.
-- Algoritmo Genético: busca do melhor volume de irrigação.
-- Voz Inteligente: preparação para STT/TTS.
-- Alertas AWS: simulação de SNS, SQS, Lambda e CloudWatch.
-- Visão Computacional: classificação simulada de imagem da lavoura.
-- Segurança: logs, firewall, tentativas suspeitas e Blue Team.
-- Integração Final: fluxo Sensor -> Banco -> IA -> Dashboard -> Alerta -> Recomendação.
-- Conclusão: síntese da solução e próximos passos.
-
-## Próximos passos
-
-- Usar dados reais de sensores ESP32.
-- Treinar um modelo LSTM real com histórico maior.
-- Integrar AWS real com credenciais seguras.
-- Containerizar módulos como microsserviços.
-- Criar infraestrutura CloudFormation.
-- Expandir segurança com autenticação, auditoria e resposta a incidentes.
-
-## Integrantes do grupo
-
-- Integrante 1 - RM
-- Integrante 2 - RM
-- Integrante 3 - RM
-- Integrante 4 - RM
-- Integrante 5 - RM
-
+1. Clone este repositório.
+2. Instale as dependências necessárias:
+   ```bash
+   pip install pandas plotly streamlit
+   ```
+3. Na raiz do projeto, execute o comando de inicialização:
+   ```bash
+   streamlit run app.py
+   ```
+4. Aceda ao painel através do navegador no endereço http://localhost:8501.
