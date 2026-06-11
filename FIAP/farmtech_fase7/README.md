@@ -27,10 +27,10 @@ Quando um limiar crítico é ultrapassado, o fluxo de comunicação é acionado:
 ### Evidências da Solução AWS
 *(Abaixo encontram-se os prints que comprovam a infraestrutura e o recebimento dos alertas)*
 
-![Print do Alerta Recebido no Email](INSERIR_CAMINHO_DA_IMAGEM_AQUI.jpg)
+![Print do Alerta Recebido no Email](assets/alerta_email.png)
 > **Descrição:** E-mail/SMS recebido pelo funcionário com a notificação do alerta gerado pela plataforma.
 
-![Print do Console da AWS - SNS](INSERIR_CAMINHO_DA_IMAGEM_AQUI.jpg)
+![Print do Console da AWS - SNS](assets/aws_console.png)
 > **Descrição:** Configuração do Tópico SNS e subscrições na consola da AWS.
 
 ---
@@ -49,3 +49,13 @@ Quando um limiar crítico é ultrapassado, o fluxo de comunicação é acionado:
    streamlit run app.py
    ```
 4. Aceda ao painel através do navegador no endereço http://localhost:8501.
+
+---
+
+## 👨‍🎓 Integrantes
+| Nome | RM | E-mail |
+|------|-----|--------|
+| **Fabrício Mouzer Brito** | RM566777 | fabriciomouzer@hotmail.com |
+| **Enzo Nunes Castanheira Gloria da Silva** | RM567599 | enzoncgs@gmail.com |
+| **Larissa Nunes Moreira Reis** | RM568280 | larissa.nmreis@gmail.com |
+| **Gabriel Rapozo Guimarães Soares** | RM568480 | rapozogabriel8@gmail.com |
