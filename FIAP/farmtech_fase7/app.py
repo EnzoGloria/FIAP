@@ -183,21 +183,35 @@ def tela_alertas_aws(sensores: pd.DataFrame) -> None:
 
 def tela_visao_computacional() -> None:
     st.header("Visao Computacional")
-    resultado = analisar_imagem_lavoura()
-    st.write("Analise simulada preparada para futura integracao com IA como servico na AWS.")
-    st.json(resultado)
-    fig = px.bar(
-        pd.DataFrame(
-            [
-                {"classe": "Saudavel", "confianca": 0.81},
-                {"classe": resultado["classe"], "confianca": resultado["confianca"]},
-            ]
-        ),
-        x="classe",
-        y="confianca",
-        title="Classificacao simulada da lavoura",
-    )
-    st.plotly_chart(fig, use_container_width=True)
+    st.write("Analise de alta fidelidade usando YOLO (Mock) com imagens de validacao.")
+    
+    pasta_imagens = ROOT_DIR / "images"
+    arquivos_imagem = []
+    if pasta_imagens.exists():
+        arquivos_imagem = [f.name for f in pasta_imagens.iterdir() if f.suffix.lower() in [".jpg", ".jpeg", ".png"]]
+    
+    if arquivos_imagem:
+        imagem_selecionada = st.selectbox("Selecione uma imagem da lavoura:", arquivos_imagem)
+        caminho_imagem = pasta_imagens / str(imagem_selecionada)
+        st.image(str(caminho_imagem), caption=str(imagem_selecionada), use_container_width=True)
+        
+        if st.button("Executar Analise YOLO", type="primary"):
+            resultado = analisar_imagem_lavoura(str(caminho_imagem))
+            
+            col1, col2 = st.columns(2)
+            col1.metric("Diagnostico", resultado["classe"])
+            col2.metric("Confianca", f"{resultado['confianca'] * 100:.1f}%")
+            
+            if resultado["classe"] == "Saudavel":
+                st.success(resultado["recomendacao"])
+            elif resultado["classe"] == "Anomalia Desconhecida":
+                st.warning(resultado["recomendacao"])
+            else:
+                st.error(resultado["recomendacao"])
+            
+            st.json(resultado)
+    else:
+        st.warning("Nenhuma imagem encontrada na pasta images/. Adicione imagens (.jpg, .jpeg, .png) para testar.")
 
 
 def tela_seguranca() -> None:

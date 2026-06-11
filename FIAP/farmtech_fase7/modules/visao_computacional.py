@@ -1,21 +1,36 @@
 from __future__ import annotations
 
-from random import choice, uniform
+import os
+import random
 
 
-def analisar_imagem_lavoura(imagem_nome: str = "amostra_lavoura.jpg") -> dict:
-    classe = choice(["Saudavel", "Deficiencia hidrica", "Possivel praga", "Baixo vigor"])
-    recomendacoes = {
-        "Saudavel": "Manter monitoramento preventivo.",
-        "Deficiencia hidrica": "Aumentar prioridade de irrigacao.",
-        "Possivel praga": "Realizar vistoria e avaliar manejo integrado.",
-        "Baixo vigor": "Verificar nutricao, solo e compactacao.",
-    }
+def analisar_imagem_lavoura(caminho_imagem: str) -> dict:
+    nome_arquivo = os.path.basename(caminho_imagem).lower()
+    confianca = round(random.uniform(0.88, 0.96), 2)
+    
+    if "ferrugem" in nome_arquivo:
+        classe = "Ferrugem Asiatica"
+        recomendacao = "Aplicar fungicida imediatamente e isolar area."
+    elif "mancha" in nome_arquivo:
+        classe = "Mancha Alvo"
+        recomendacao = "Avaliar controle quimico e rotacao de culturas."
+    elif "saudavel" in nome_arquivo:
+        classe = "Saudavel"
+        recomendacao = "Manter monitoramento preventivo padrao."
+    elif "praga" in nome_arquivo or "inseto" in nome_arquivo:
+        classe = "Possivel Praga"
+        recomendacao = "Realizar vistoria manual e avaliar manejo integrado."
+    elif "hidrica" in nome_arquivo or "seca" in nome_arquivo:
+        classe = "Deficiencia Hidrica"
+        recomendacao = "Aumentar prioridade de irrigacao no talhao."
+    else:
+        classe = "Anomalia Desconhecida"
+        recomendacao = "Necessaria vistoria manual detalhada pelo agronomo."
+
     return {
-        "imagem": imagem_nome,
+        "imagem": nome_arquivo,
         "classe": classe,
-        "confianca": round(uniform(0.74, 0.97), 2),
-        "recomendacao": recomendacoes[classe],
+        "confianca": confianca,
+        "recomendacao": recomendacao,
         "servico_aws_futuro": "Amazon Rekognition ou SageMaker endpoint",
     }
-
