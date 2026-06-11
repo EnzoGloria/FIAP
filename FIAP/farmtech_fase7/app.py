@@ -8,10 +8,10 @@ import streamlit as st
 
 from modules.algoritmo_genetico import otimizar_irrigacao
 from modules.alertas_aws import avaliar_alerta_sensor
+from modules.analise_clima import executar_scripts_r
 from modules.banco import consultar_alertas, consultar_sensores, criar_banco, inserir_alerta, inserir_leitura
-from modules.dashboard_utils import calcular_metricas, grafico_fluxo_integracao, grafico_temperatura, grafico_umidade
+from modules.dashboard_utils import calcular_metricas, grafico_temperatura, grafico_umidade
 from modules.previsao_lstm import classificar_risco_umidade, prever_umidade_futura
-from modules.seguranca import analisar_postura_blue_team, gerar_logs_seguranca
 from modules.sensores import SensorAgricola, gerar_leituras_simuladas
 from modules.visao_computacional import analisar_imagem_lavoura
 from modules.voz import interpretar_comando_agricola, reconhecer_fala_placeholder, sintetizar_voz_placeholder
@@ -74,6 +74,25 @@ def tela_visao_geral(sensores: pd.DataFrame, plantio: pd.DataFrame, alertas: pd.
         st.plotly_chart(grafico_temperatura(sensores), use_container_width=True)
     st.subheader("Plantio monitorado")
     st.dataframe(plantio, use_container_width=True)
+
+
+def tela_analise_climatica() -> None:
+    st.header("Analise Climatica (Fase 1 - R)")
+    st.write("Execucao de scripts meteorologicos em R via subprocess ou fallback local.")
+    
+    with st.spinner("Processando dados climaticos..."):
+        df_clima, df_correlacao = executar_scripts_r()
+        
+    st.subheader("Historico Meteorologico")
+    fig_temp = px.line(df_clima, x="data", y=["temperatura", "umidade", "precipitacao"], title="Evolucao do Clima ao longo do tempo")
+    st.plotly_chart(fig_temp, use_container_width=True)
+    
+    st.subheader("Matriz de Correlacao Meteorologica")
+    fig_cor = px.imshow(df_correlacao, text_auto=True, title="Correlacao Climatica (R)", color_continuous_scale="RdBu_r")
+    st.plotly_chart(fig_cor, use_container_width=True)
+    
+    with st.expander("Ver Base de Dados Bruta"):
+        st.dataframe(df_clima, use_container_width=True)
 
 
 def tela_dados_agricolas(sensores: pd.DataFrame, plantio: pd.DataFrame) -> None:
@@ -214,48 +233,6 @@ def tela_visao_computacional() -> None:
         st.warning("Nenhuma imagem encontrada na pasta images/. Adicione imagens (.jpg, .jpeg, .png) para testar.")
 
 
-def tela_seguranca() -> None:
-    st.header("Seguranca")
-    logs = gerar_logs_seguranca()
-    analise = analisar_postura_blue_team(logs)
-
-    col1, col2, col3 = st.columns(3)
-    col1.metric("Firewall", analise["firewall"])
-    col2.metric("Tentativas suspeitas", analise["tentativas_suspeitas"])
-    col3.metric("Risco atual", analise["risco"])
-
-    st.subheader("Logs de seguranca")
-    st.dataframe(pd.DataFrame(logs), use_container_width=True)
-    st.subheader("Boas praticas Blue Team")
-    for pratica in analise["boas_praticas"]:
-        st.write(f"- {pratica}")
-
-
-def tela_integracao_final() -> None:
-    st.header("Integracao Final")
-    st.write("Fluxo consolidado da Fase 7.")
-    st.plotly_chart(grafico_fluxo_integracao(), use_container_width=True)
-    st.success("Sensor -> Banco de Dados -> IA -> Dashboard -> Alerta -> Recomendacao")
-
-
-def tela_conclusao() -> None:
-    st.header("Conclusao")
-    st.write(
-        "A FarmTech Solutions consolida as fases anteriores em uma arquitetura local, extensivel e preparada "
-        "para evoluir com IA temporal, voz, otimizacao genetica, microsservicos, AWS e praticas Blue Team."
-    )
-    st.markdown(
-        """
-        **Proximos passos**
-
-        - Treinar LSTM real com historico maior.
-        - Integrar Amazon Transcribe, Polly, Rekognition e SNS.
-        - Publicar microsservicos com Docker e CloudFormation.
-        - Ampliar controles de seguranca, logs e resposta a incidentes.
-        """
-    )
-
-
 def main() -> None:
     sensores = carregar_dados_sensores()
     plantio = carregar_csv("plantio.csv")
@@ -266,6 +243,7 @@ def main() -> None:
         "Menu",
         [
             "Visao Geral",
+            "Analise Climatica (R)",
             "Dados Agricolas",
             "IoT e Sensores",
             "Banco de Dados",
@@ -274,9 +252,6 @@ def main() -> None:
             "Voz Inteligente",
             "Alertas AWS",
             "Visao Computacional",
-            "Seguranca",
-            "Integracao Final",
-            "Conclusao",
         ],
     )
 
@@ -284,6 +259,8 @@ def main() -> None:
 
     if pagina == "Visao Geral":
         tela_visao_geral(sensores, plantio, alertas)
+    elif pagina == "Analise Climatica (R)":
+        tela_analise_climatica()
     elif pagina == "Dados Agricolas":
         tela_dados_agricolas(sensores, plantio)
     elif pagina == "IoT e Sensores":
@@ -300,14 +277,7 @@ def main() -> None:
         tela_alertas_aws(sensores)
     elif pagina == "Visao Computacional":
         tela_visao_computacional()
-    elif pagina == "Seguranca":
-        tela_seguranca()
-    elif pagina == "Integracao Final":
-        tela_integracao_final()
-    elif pagina == "Conclusao":
-        tela_conclusao()
 
 
 if __name__ == "__main__":
     main()
-

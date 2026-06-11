@@ -1,0 +1,8 @@
+set.seed(42)
+dias <- seq(as.Date("2025-01-01"), as.Date("2026-06-01"), by="days")
+n <- length(dias)
+temperatura <- 25 + 5 * sin(seq(1, n) * 2 * pi / 365) + rnorm(n, 0, 2)
+umidade <- 70 + 15 * cos(seq(1, n) * 2 * pi / 365) + rnorm(n, 0, 5)
+precipitacao <- rexp(n, rate = 0.2) * (umidade > 70)
+dados_clima <- data.frame(data = dias, temperatura = temperatura, umidade = umidade, precipitacao = precipitacao)
+write.csv(dados_clima, "data/clima_historico.csv", row.names = FALSE)
