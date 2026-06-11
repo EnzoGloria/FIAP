@@ -1,7 +1,7 @@
 # 🌾 FarmTech Solutions - Integração Final (Fase 7)
 
 ## 🎥 Apresentação do Projeto
-> **Assista ao vídeo de demonstração (10 minutos) com todas as funcionalidades:** > [INSERIR LINK DO VÍDEO DO YOUTUBE AQUI (Não Listado)]
+> **Assista ao vídeo de demonstração (10 minutos) com todas as funcionalidades:** > https://youtu.be/PyV5Fa3vzgw
 
 ---
 
